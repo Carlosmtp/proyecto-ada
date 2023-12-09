@@ -13,7 +13,7 @@ def main():
     diccionario = {}
     # print(partes)
     print("Los animales que participaron en más escenas fueron: ", 
-          hallarRepeticion(apertura, diccionario, True))
+          hallarRepeticion(apertura.getEscenas().getRaiz(), diccionario, True))
     # print("Los animales que participaron en menos escenas fueron: ", 
     #       hallarRepeticion(espectaculo, diccionario, False))
 

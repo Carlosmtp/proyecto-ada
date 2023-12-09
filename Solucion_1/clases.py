@@ -126,22 +126,38 @@ def imprimir_espectaculo(espectaculo, funcion=imprimir_parte):
     print("")
     INORDER(espectaculo.getPartes().getRaiz(), funcion)
 
-# Complejidad O(n), ya que cada animal es accedido una sola vez
+#Complejidad O(n), ya que cada animal es accedido una sola vez
 def REPETICION_ANIMALES(nodo, diccionario):
-    def funcion(nodo):
-        nombre_animal = nodo.getValor().getNombreAnimal()
-        if nombre_animal in diccionario:
-            diccionario[nombre_animal] += 1
-        else:
-            diccionario[nombre_animal] = 1
-    INORDER(nodo, funcion)
+    def dfs(nodo):
+        if nodo is not None:
+            nombre_animal = nodo.getValor().getNombreAnimal()
+            if nombre_animal in diccionario:
+                diccionario[nombre_animal] += 1
+            else:
+                diccionario[nombre_animal] = 1
+            dfs(nodo.getHijoIzq())
+            dfs(nodo.getHijoDer())
+    dfs(nodo)
 
-# Complejidad O(n), ya que cada escena es accedida una sola vez
+#Complejidad (n) ya que cada escena es accedida una sola vez
 def REPETICION(nodo, diccionario):
-    def funcion(nodo):
-        REPETICION_ANIMALES(nodo.getValor().getAnimales().getRaiz(), diccionario)
-    INORDER(nodo, funcion)
-    return diccionario  
+    if nodo != None:
+        REPETICION(nodo.getHijoIzq(), diccionario)  
+        REPETICION_ANIMALES(nodo.getValor().getAnimales().getRaiz(), diccionario)  
+        REPETICION(nodo.getHijoDer(), diccionario)
+    return diccionario    
+
+#Complejidad O(n) ya que cada clave en el diccionario es accedida una sola vez
+def hallarRepeticion(nodo, diccionario, buscarMayor):
+    dicc = REPETICION(nodo, diccionario)
+    lista = []
+    for key, value in dicc.items():
+        if lista and ((buscarMayor and value > dicc[lista[-1]]) or (not buscarMayor and value < dicc[lista[-1]])):
+            lista[-1] = key
+        elif not lista or value == dicc[lista[-1]]:
+            lista.append(key)  
+
+    return lista
 
 # #Complejidad O(n) ya que cada clave en el diccionario es accedida una sola vez
 # def hallarRepeticion(nodo, diccionario, buscarMayor):
@@ -153,20 +169,6 @@ def REPETICION(nodo, diccionario):
 #         elif not lista or value == dicc[lista[-1][0]]:
 #             lista.append((key, value))  
 #     return lista
-
-
-
-
-def hallarRepeticion(nodo, diccionario, buscarMayor):
-    dicc = REPETICION(nodo, diccionario)
-    lista = []
-    for key, value in dicc.items():
-        if lista and ((buscarMayor and value > dicc[lista[-1]]) or (not buscarMayor and value < dicc[lista[-1]])):
-            lista[-1] = key
-        elif not lista or value == dicc[lista[-1]]:
-            lista.append(key)  
-
-    return lista
 
 # def hallarRepeticionPartes(apertura, espectaculo, diccionario, buscarMayor):
 #     diccionario = REPETICION(apertura.getEscenas().getRaiz(), diccionario)
