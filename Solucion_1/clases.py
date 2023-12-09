@@ -148,10 +148,11 @@ def REPETICION(nodo, diccionario):
     return diccionario    
 
 #Complejidad O(n) ya que cada clave en el diccionario es accedida una sola vez
-def hallarRepeticion(nodo, diccionario, buscarMayor):
-    dicc = REPETICION(nodo, diccionario)
+def hallarRepeticion(partes, diccionario, buscarMayor):
     lista = []
     repeticiones = 0
+    for i in range(len(partes)):
+        dicc = REPETICION(partes[i].getEscenas().getRaiz(), diccionario)
     for key, value in dicc.items():
         if lista and ((buscarMayor and value > dicc[lista[-1]]) or (not buscarMayor and value < dicc[lista[-1]])):
             lista[-1] = key
@@ -159,6 +160,7 @@ def hallarRepeticion(nodo, diccionario, buscarMayor):
             lista.append(key)  
             repeticiones = value
     return lista, repeticiones
+
 
 
            

@@ -1,6 +1,5 @@
 from entrada import *
 from clases import hallarRepeticion, imprimir_parte, imprimir_espectaculo, imprimir_escena
-
 def main():
     print("=========== APERTURA ==============")
     imprimir_parte(apertura)
@@ -11,12 +10,12 @@ def main():
     print("=========== DATOS PUNTUALES SOLICITADOS ==============")
     print("")
     diccionario = {}
-    # print(partes)
-    lista, repeticiones = hallarRepeticion(apertura.getEscenas().getRaiz(), diccionario, True)
+    lista, repeticiones = hallarRepeticion(partes, diccionario, True)
     print("Los animales que participaron en más escenas fueron: ", lista)
     print("Las escenas en las que participaron fueron: ", repeticiones)
     print("")
-    lista, repeticiones = hallarRepeticion(apertura.getEscenas().getRaiz(), diccionario, False)
+    diccionario = {}
+    lista, repeticiones = hallarRepeticion(partes, diccionario, False)
     print("Los animales que participaron en menos escenas fueron: ", lista)
     print("Las escenas en las que participaron fueron: ", repeticiones)
 
