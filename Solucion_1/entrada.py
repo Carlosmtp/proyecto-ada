@@ -1,6 +1,6 @@
 from clases import Animal, Escena, Parte, Espectaculo
 
-# Datos de entrada
+# Datos de entrada 1
 # n=6, m=3, k=2
 # Crear objetos de animales
 animal1 = Animal("León", 6)

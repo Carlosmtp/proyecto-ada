@@ -43,7 +43,7 @@ class ArbolRN:
         return self.raiz
     
     # Crea un árbol binario de búsqueda
-    # Complejidad: O(nlogn)
+    # Complejidad: O(logn) 
     def TREE_INSERT (self, nodo):
         y = None
         x = self.raiz
@@ -173,7 +173,8 @@ class ArbolRN:
         while x.getHijoIzq() != None:
             x = x.getHijoIzq()
         return x.getValor()
-            
+
+    #Complejidad O(logn)        
     def TREE_SEARCH(self, nodo):
         x = self.raiz
         while x != None and nodo.getValor().getGrandeza() != self.getValor().getGrandeza():
@@ -183,9 +184,11 @@ class ArbolRN:
                 x.getHijoDer()   
         return x.getValor()         
 
+    #Complejidad O(n)
     def print_tree(self):
         self._print_tree_helper(self.raiz, "") 
 
+    #Complejidad O(n)
     def _print_tree_helper(self, nodo, prefix):
         if nodo is None:
             return
