@@ -12,10 +12,13 @@ def main():
     print("")
     diccionario = {}
     # print(partes)
-    print("Los animales que participaron en más escenas fueron: ", 
-          hallarRepeticion(apertura.getEscenas().getRaiz(), diccionario, True))
-    # print("Los animales que participaron en menos escenas fueron: ", 
-    #       hallarRepeticion(espectaculo, diccionario, False))
+    lista, repeticiones = hallarRepeticion(apertura.getEscenas().getRaiz(), diccionario, True)
+    print("Los animales que participaron en más escenas fueron: ", lista)
+    print("Las escenas en las que participaron fueron: ", repeticiones)
+    print("")
+    lista, repeticiones = hallarRepeticion(apertura.getEscenas().getRaiz(), diccionario, False)
+    print("Los animales que participaron en menos escenas fueron: ", lista)
+    print("Las escenas en las que participaron fueron: ", repeticiones)
 
     print("")
     print("La escena de mayor grandeza total fue: ")

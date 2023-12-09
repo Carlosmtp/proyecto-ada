@@ -151,37 +151,16 @@ def REPETICION(nodo, diccionario):
 def hallarRepeticion(nodo, diccionario, buscarMayor):
     dicc = REPETICION(nodo, diccionario)
     lista = []
+    repeticiones = 0
     for key, value in dicc.items():
         if lista and ((buscarMayor and value > dicc[lista[-1]]) or (not buscarMayor and value < dicc[lista[-1]])):
             lista[-1] = key
         elif not lista or value == dicc[lista[-1]]:
             lista.append(key)  
+            repeticiones = value
+    return lista, repeticiones
 
-    return lista
 
-# #Complejidad O(n) ya que cada clave en el diccionario es accedida una sola vez
-# def hallarRepeticion(nodo, diccionario, buscarMayor):
-#     dicc = REPETICION(nodo, diccionario)
-#     lista = []
-#     for key, value in dicc.items():
-#         if lista and ((buscarMayor and value > dicc[lista[-1][0]]) or (not buscarMayor and value < dicc[lista[-1][0]])):
-#             lista[-1] = (key, value)
-#         elif not lista or value == dicc[lista[-1][0]]:
-#             lista.append((key, value))  
-#     return lista
-
-# def hallarRepeticionPartes(apertura, espectaculo, diccionario, buscarMayor):
-#     diccionario = REPETICION(apertura.getEscenas().getRaiz(), diccionario)
-#     imprimir_espectaculo(espectaculo, REPETICION)
-#     diccionario = REPETICION(espectaculo.getPartes(), diccionario)
-#     lista = []
-#     for key, value in diccionario.items():
-#         if lista and ((buscarMayor and value > diccionario[lista[-1][0]]) or (not buscarMayor and value < diccionario[lista[-1][0]])):
-#             lista[-1] = (key, value)
-#         elif not lista or value == diccionario[lista[-1][0]]:
-#             lista.append((key, value))  
-
-#     return lista
            
 
 
