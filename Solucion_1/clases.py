@@ -17,6 +17,7 @@ class Escena:
     def __init__(self):
         self.animales = ArbolRN()
         self.grandezaEscena = 0
+        self.maximo = 0
 
     def agregar_animal(self, animal):
         self.animales.TREE_INSERT(Nodo(animal))
@@ -32,17 +33,22 @@ class Escena:
         return self.animales
 
     def getGrandeza(self):
-        return self.grandezaEscena    
+        return self.grandezaEscena  
+    
+    def getMaximo(self):
+        return self.animales.TREE_MAXIMUM().getGrandeza()
 
 #Clase Parte
 class Parte:
     def __init__(self):
         self.escenas = ArbolRN()
         self.grandezaParte = 0
+        self.totalEscenas = 0
 
     def agregar_escena(self, escena):
         self.escenas.TREE_INSERT(Nodo(escena))
         self.aumentar_grandeza(escena.getGrandeza())
+        self.totalEscenas += 1 
 
     def aumentar_grandeza(self, cantidad):
         self.grandezaParte += cantidad    
@@ -55,10 +61,14 @@ class Parte:
 
     def getGrandeza(self):
         return self.grandezaParte     
+    
+    def getPromedioGrandeza(self):
+        return self.grandezaParte/self.totalEscenas
 
 #Clase Espectaculo    
 class Espectaculo:
     def __init__(self):
+        self.apertura = None
         self.partes = ArbolRN()
         self.grandezaEspectaculo = 0
         self.totalPartes = 0
@@ -80,47 +90,73 @@ class Espectaculo:
     def getGrandeza(self):
         return self.grandezaEspectaculo   
     
-    def getPromedioGrandeza(self):
-        return self.grandezaEspectaculo/self.totalPartes
+    def getTotalPartes(self):
+        return self.totalPartes   
 
-#Complejidad O(n)
-def INORDER_ESCENAS(nodo):
-    if nodo != None:
-        INORDER_ESCENAS(nodo.getHijoIzq())  
-        print(nodo.getValor().getNombreAnimal())
-        INORDER_ESCENAS(nodo.getHijoDer())       
+    def getApertura(self):
+        return self.apertura    
+    
+    def setApertura(self, apertura):
+        self.apertura = apertura
 
-#Una parte contiene escenas
-#Complejidad O(n)
-def INORDER_PARTE(nodo):
-    if nodo != None:
-        INORDER_PARTE(nodo.getHijoIzq())  
-        print("")
-        INORDER_ESCENAS(nodo.getValor().getAnimales().getRaiz())
-        INORDER_PARTE(nodo.getHijoDer())
+# Complejidad O(n)
+def INORDER(nodo, funcion):
+    if nodo is not None:
+        INORDER(nodo.getHijoIzq(), funcion)
+        funcion(nodo.getValor())
+        INORDER(nodo.getHijoDer(), funcion)
 
-#Complejidad O(n), ya que cada animal es accedido una sola vez
+def imprimir_nombre_animal(nodo):
+    print(nodo.getNombreAnimal())
+
+#Imprimir las animales de una escena
+def imprimir_escena(escena, funcion=imprimir_nombre_animal):
+    print("")
+    print("===  Escena  ===")
+    INORDER(escena.getAnimales().getRaiz(), funcion)
+
+#Imprimir las escenas de una parte
+def imprimir_parte(parte, funcion=imprimir_escena):
+    print("")
+    print("===  Parte  ===")
+    INORDER(parte.getEscenas().getRaiz(), funcion)
+
+#Imprimir las partes de un espectaculo
+def imprimir_espectaculo(espectaculo, funcion=imprimir_parte):
+    print("")
+    INORDER(espectaculo.getPartes().getRaiz(), funcion)
+
+# Complejidad O(n), ya que cada animal es accedido una sola vez
 def REPETICION_ANIMALES(nodo, diccionario):
-    def dfs(nodo):
-        if nodo is not None:
-            nombre_animal = nodo.getValor().getNombreAnimal()
-            if nombre_animal in diccionario:
-                diccionario[nombre_animal] += 1
-            else:
-                diccionario[nombre_animal] = 1
-            dfs(nodo.getHijoIzq())
-            dfs(nodo.getHijoDer())
-    dfs(nodo)
+    def funcion(nodo):
+        nombre_animal = nodo.getValor().getNombreAnimal()
+        if nombre_animal in diccionario:
+            diccionario[nombre_animal] += 1
+        else:
+            diccionario[nombre_animal] = 1
+    INORDER(nodo, funcion)
 
-#Complejidad (n) ya que cada escena es accedida una sola vez
+# Complejidad O(n), ya que cada escena es accedida una sola vez
 def REPETICION(nodo, diccionario):
-    if nodo != None:
-        REPETICION(nodo.getHijoIzq(), diccionario)  
-        REPETICION_ANIMALES(nodo.getValor().getAnimales().getRaiz(), diccionario)  
-        REPETICION(nodo.getHijoDer(), diccionario)
-    return diccionario    
+    def funcion(nodo):
+        REPETICION_ANIMALES(nodo.getValor().getAnimales().getRaiz(), diccionario)
+    INORDER(nodo, funcion)
+    return diccionario  
 
-#Complejidad O(n) ya que cada clave en el diccionario es accedida una sola vez
+# #Complejidad O(n) ya que cada clave en el diccionario es accedida una sola vez
+# def hallarRepeticion(nodo, diccionario, buscarMayor):
+#     dicc = REPETICION(nodo, diccionario)
+#     lista = []
+#     for key, value in dicc.items():
+#         if lista and ((buscarMayor and value > dicc[lista[-1][0]]) or (not buscarMayor and value < dicc[lista[-1][0]])):
+#             lista[-1] = (key, value)
+#         elif not lista or value == dicc[lista[-1][0]]:
+#             lista.append((key, value))  
+#     return lista
+
+
+
+
 def hallarRepeticion(nodo, diccionario, buscarMayor):
     dicc = REPETICION(nodo, diccionario)
     lista = []
@@ -132,6 +168,18 @@ def hallarRepeticion(nodo, diccionario, buscarMayor):
 
     return lista
 
+# def hallarRepeticionPartes(apertura, espectaculo, diccionario, buscarMayor):
+#     diccionario = REPETICION(apertura.getEscenas().getRaiz(), diccionario)
+#     imprimir_espectaculo(espectaculo, REPETICION)
+#     diccionario = REPETICION(espectaculo.getPartes(), diccionario)
+#     lista = []
+#     for key, value in diccionario.items():
+#         if lista and ((buscarMayor and value > diccionario[lista[-1][0]]) or (not buscarMayor and value < diccionario[lista[-1][0]])):
+#             lista[-1] = (key, value)
+#         elif not lista or value == diccionario[lista[-1][0]]:
+#             lista.append((key, value))  
+
+#     return lista
            
 
 

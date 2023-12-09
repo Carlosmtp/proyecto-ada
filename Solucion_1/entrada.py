@@ -1,61 +1,46 @@
 from clases import Animal, Escena, Parte, Espectaculo
 
-# Datos de entrada 1
-# n=6, m=3, k=2
-# Crear objetos de animales
-animal1 = Animal("León", 6)
-animal2 = Animal("Elefante", 3)
-animal3 = Animal("Tigre", 1)
-animal4 = Animal("Jirafa", 5)
-animal5 = Animal("Cebra", 4)
-animal6 = Animal("Hipopótamo", 2)
+def leer_archivo(filename):
+    n=0
+    m=0
+    k=0
+    animales = {} 
+    apertura = Parte()
+    espectaculo = Espectaculo()
+    partes = []
+    with open(filename, 'r') as file:
+        n, m, k = map(int, file.readline().split())
+        file.readline()
+        #Crear objetos de animales y alamcenarlos en un diccionario
+        for i in range(n):
+            animal, grandeza = file.readline().strip().split()
+            animales[animal] = Animal(animal, int(grandeza))
+        file.readline().split()
+        # Crear objetos de escenas y objetos de parte
+        for i in range((m-1)*k):
+            escena = Escena()  # Crea un nuevo objeto Escena en cada iteración
+            ani1, ani2, ani3 = map(str, file.readline().split())
+            escena.agregar_animal(animales[ani1])
+            escena.agregar_animal(animales[ani2])
+            escena.agregar_animal(animales[ani3])
+            apertura.agregar_escena(escena) 
+        partes.append(apertura.getEscenas().getRaiz())
+        espectaculo.setApertura(apertura)    
+        file.readline().split()
+        for i in range(m-1):
+            parte = Parte()
+            for j in range(2):
+                escena = Escena()  # Crea un nuevo objeto Escena en cada iteración
+                ani1, ani2, ani3 = map(str, file.readline().split())
+                escena.agregar_animal(animales[ani1])
+                escena.agregar_animal(animales[ani2])
+                escena.agregar_animal(animales[ani3])
+                parte.agregar_escena(escena) 
+            espectaculo.agregar_parte(parte)
+            partes.append(parte.getEscenas().getRaiz())    
+    return n, m, k, animales, partes, apertura, espectaculo
 
-# Crear objetos de escenas
-escena1 = Escena()
-escena1.agregar_animal(animal1)
-escena1.agregar_animal(animal2)
-escena1.agregar_animal(animal3)
-# escena1.printAnimales()
+n, m, k, animales, partes, apertura, espectaculo = leer_archivo("./entrada1.txt")
 
-escena2 = Escena()
-escena2.agregar_animal(animal4)
-escena2.agregar_animal(animal3)
-escena2.agregar_animal(animal5)
-# escena2.printAnimales()
 
-escena3 = Escena()
-escena3.agregar_animal(animal1)
-escena3.agregar_animal(animal6)
-escena3.agregar_animal(animal3)
-# escena3.printAnimales()
-
-escena4 = Escena()
-escena4.agregar_animal(animal2)
-escena4.agregar_animal(animal1)
-escena4.agregar_animal(animal5)
-# escena4.printAnimales()
-
-apertura = Parte()
-apertura.agregar_escena(escena1)
-apertura.agregar_escena(escena2)
-apertura.agregar_escena(escena3)
-apertura.agregar_escena(escena4)
-# apertura.printEscenas()
-
-parte1 = Parte()
-parte1.agregar_escena(escena4)
-parte1.agregar_escena(escena3)
-# parte1.getEscenas()
-
-parte2 = Parte()
-parte2.agregar_escena(escena2)
-parte2.agregar_escena(escena1)
-# parte2.getEscenas()
-
-#Espectaculo
-espectaculo = Espectaculo()
-espectaculo.agregar_parte(apertura)
-espectaculo.agregar_parte(parte1)
-espectaculo.agregar_parte(parte2)
-print('Grandeza: ',espectaculo.getGrandeza())
 

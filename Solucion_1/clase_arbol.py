@@ -43,20 +43,16 @@ class ArbolRN:
         return self.raiz
     
     # Crea un árbol binario de búsqueda
-    # Complejidad: O(logn) 
+    # Complejidad: O(nlogn) 
     def TREE_INSERT (self, nodo):
         y = None
         x = self.raiz
         #Mientras x no sea nulo, busca la posición del nodo
         while x != None:
             y = x
-            if nodo.getValor().getGrandeza() < x.getValor().getGrandeza():
+            if nodo.getValor().getGrandeza() < x.getValor().getGrandeza() or \
+            (nodo.getValor().getGrandeza() == x.getValor().getGrandeza() and nodo.getValor().getMaximo() < x.getValor().getMaximo()):
                 x = x.getHijoIzq()
-            # elif nodo.getValor().getGrandeza() == x.getValor().getGrandeza() and isinstance(nodo.getValor(),Escena) and isinstance(x.getValor(),Escena):  
-            #     if nodo.getValor().getAnimales().TREE_MAXIMUM().getGrandeza() < x.getValor().getAnimales().TREE_MAXIMUM().getGrandeza():
-            #         x = x.getHijoIzq()
-            #     else:
-            #         x = x.getHijoDer()
             else:
                 x = x.getHijoDer()
         
@@ -69,7 +65,8 @@ class ArbolRN:
             #El color de la raíz será negro
             nodo.setColor("BLACK")
         #Si el valor del nodo es menor que el valor de y
-        elif nodo.getValor().getGrandeza() < y.getValor().getGrandeza():
+        elif nodo.getValor().getGrandeza() < y.getValor().getGrandeza() or \
+         (nodo.getValor().getGrandeza() == y.getValor().getGrandeza() and nodo.getValor().getMaximo() < y.getValor().getMaximo()):
             y.setHijoIzq(nodo)
             nodo.setColor("RED")
         else:
