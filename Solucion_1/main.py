@@ -29,6 +29,6 @@ def main():
 
     print("")
     print("El promedio de grandeza de todo el espectaculo fue: ")
-    print(apertura.getPromedioGrandeza())
+    print(round(apertura.getPromedioGrandeza(), 2))
 
 main()

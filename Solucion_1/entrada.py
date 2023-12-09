@@ -29,7 +29,7 @@ def leer_archivo(filename):
         file.readline().split()
         for i in range(m-1):
             parte = Parte()
-            for j in range(2):
+            for j in range(k):
                 escena = Escena()  # Crea un nuevo objeto Escena en cada iteración
                 ani1, ani2, ani3 = map(str, file.readline().split())
                 escena.agregar_animal(animales[ani1])
@@ -40,7 +40,7 @@ def leer_archivo(filename):
             partes.append(parte)    
     return n, m, k, animales, partes, apertura, espectaculo
 
-n, m, k, animales, partes, apertura, espectaculo = leer_archivo("./entrada1.txt")
+n, m, k, animales, partes, apertura, espectaculo = leer_archivo("./entrada2.txt")
 
 
 
