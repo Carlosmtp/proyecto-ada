@@ -1,5 +1,5 @@
 from entrada import *
-from clases import INORDER_PARTE, INORDER_ESCENAS
+from clases import INORDER_PARTE, INORDER_ESCENAS, hallarRepeticion
 
 def main():
     print("=========== APERTURA ==============")
@@ -12,9 +12,10 @@ def main():
     print("")
     print("=========== DATOS PUNTUALES SOLICITADOS ==============")
     print("")
-    print("El/Los animal(es) que participó/participaron en más escenas fue: ")
+    diccionario = {}
+    print("Los animales que participaron en más escenas fueron: ", hallarRepeticion(apertura.getEscenas().getRaiz(), diccionario, True))
 
-    print("El/Los animal(es) que participó/participaron en menos escenas fue: ")
+    print("Los animales que participaron en menos escenas fueron: ", hallarRepeticion(apertura.getEscenas().getRaiz(), diccionario, False))
 
     print("")
     print("La escena de mayor grandeza total fue: ")
@@ -26,8 +27,6 @@ def main():
 
     print("El promedio de grandeza de todo el espectaculo fue: ")
     print(espectaculo.getPromedioGrandeza())
-
-    # INORDER_TREE_WALK(escena1.getAnimales().getRaiz())
 
 
 main()

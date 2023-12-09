@@ -42,10 +42,6 @@ apertura.agregar_escena(escena3)
 apertura.agregar_escena(escena4)
 # apertura.printEscenas()
 
-# # Debe ser modificado en lugar de la grandeza se debe arrojar la escena
-# print('La escena con mayor grandeza fue: ', apertura.getEscenas().TREE_MAXIMUM())
-# print('La escena con menor grandeza fue:', apertura.getEscenas().TREE_MINIMUN())
-
 parte1 = Parte()
 parte1.agregar_escena(escena4)
 parte1.agregar_escena(escena3)

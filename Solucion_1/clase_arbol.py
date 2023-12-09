@@ -33,7 +33,6 @@ class Nodo:
 
     def setColor(self, color):
         self.color = color
-       
 
 #Clase Arbol
 class ArbolRN:
@@ -175,6 +174,15 @@ class ArbolRN:
             x = x.getHijoIzq()
         return x.getValor()
             
+    def TREE_SEARCH(self, nodo):
+        x = self.raiz
+        while x != None and nodo.getValor().getGrandeza() != self.getValor().getGrandeza():
+            if nodo.getValor().getGrandeza() < x.getValor().getGrandeza():
+                x = x.getHijoIzq()
+            else:
+                x.getHijoDer()   
+        return x.getValor()         
+
     def print_tree(self):
         self._print_tree_helper(self.raiz, "") 
 
