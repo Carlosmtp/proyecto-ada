@@ -25,7 +25,7 @@ def main():
     INORDER_ESCENAS(apertura.getEscenas().TREE_MINIMUN().getAnimales().getRaiz())
 
     print("El promedio de grandeza de todo el espectaculo fue: ")
-    espectaculo.getGrandeza()
+    print(espectaculo.getPromedioGrandeza())
 
     # INORDER_TREE_WALK(escena1.getAnimales().getRaiz())
 

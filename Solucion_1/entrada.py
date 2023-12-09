@@ -61,4 +61,5 @@ espectaculo = Espectaculo()
 espectaculo.agregar_parte(apertura)
 espectaculo.agregar_parte(parte1)
 espectaculo.agregar_parte(parte2)
+print('Grandeza: ',espectaculo.getGrandeza())
 

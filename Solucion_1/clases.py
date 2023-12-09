@@ -61,10 +61,12 @@ class Espectaculo:
     def __init__(self):
         self.partes = ArbolRN()
         self.grandezaEspectaculo = 0
+        self.totalPartes = 0
 
     def agregar_parte(self, parte):
         self.partes.TREE_INSERT(Nodo(parte))
-        self.aumentar_grandeza(parte.getGrandeza())      
+        self.aumentar_grandeza(parte.getGrandeza())    
+        self.totalPartes += 1  
 
     def aumentar_grandeza(self, cantidad):
         self.grandezaEspectaculo += cantidad
@@ -77,6 +79,9 @@ class Espectaculo:
 
     def getGrandeza(self):
         return self.grandezaEspectaculo   
+    
+    def getPromedioGrandeza(self):
+        return self.grandezaEspectaculo/self.totalPartes
 
 #Complejidad O(n)
 def INORDER_ESCENAS(nodo):
