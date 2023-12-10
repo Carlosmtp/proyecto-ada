@@ -1,16 +1,20 @@
-from clase_arbol import ArbolRN, Nodo
+from clase_arbol import ArbolRN, Nodo, diccionario
 
 #Clase Animal
 class Animal:
     def __init__(self, animal, grandeza):
         self.nombre_animal = animal
         self.grandeza = grandeza
+        self.tipoObjeto = "Animal"
 
     def getNombreAnimal(self):
         return self.nombre_animal
 
     def getGrandeza(self):
         return self.grandeza    
+    
+    def getTipoObjeto(self):
+        return self.tipoObjeto
 
 #Clase Escena
 class Escena:
@@ -18,6 +22,7 @@ class Escena:
         self.animales = ArbolRN()
         self.grandezaEscena = 0
         self.maximo = 0
+        self.tipoObjeto = "Escena"
 
     def agregar_animal(self, animal):
         self.animales.TREE_INSERT(Nodo(animal))
@@ -37,6 +42,9 @@ class Escena:
     
     def getMaximo(self):
         return self.animales.TREE_MAXIMUM().getGrandeza()
+    
+    def getTipoObjeto(self):
+        return self.tipoObjeto
 
 #Clase Parte
 class Parte:
@@ -44,6 +52,7 @@ class Parte:
         self.escenas = ArbolRN()
         self.grandezaParte = 0
         self.totalEscenas = 0
+        self.tipoObjeto = "Parte"
 
     def agregar_escena(self, escena):
         self.escenas.TREE_INSERT(Nodo(escena))
@@ -64,6 +73,9 @@ class Parte:
     
     def getPromedioGrandeza(self):
         return self.grandezaParte/self.totalEscenas
+    
+    def getTipoObjeto(self):
+        return self.tipoObjeto
 
 #Clase Espectaculo    
 class Espectaculo:
@@ -72,6 +84,7 @@ class Espectaculo:
         self.partes = ArbolRN()
         self.grandezaEspectaculo = 0
         self.totalPartes = 0
+        self.tipoObjeto = "Espectaculo"
 
     def agregar_parte(self, parte):
         self.partes.TREE_INSERT(Nodo(parte))
@@ -99,6 +112,11 @@ class Espectaculo:
     def setApertura(self, apertura):
         self.apertura = apertura
 
+    def getTipoObjeto(self):
+        return self.tipoObjeto    
+
+
+#Funciones necesarias 
 # Complejidad O(n)
 def INORDER(nodo, funcion):
     if nodo is not None:
@@ -114,11 +132,14 @@ def imprimir_escena(escena, funcion=imprimir_nombre_animal):
     print("")
     print("===  Escena  ===")
     INORDER(escena.getAnimales().getRaiz(), funcion)
+    print("Grandeza de la escena: ", escena.getGrandeza())
 
 #Imprimir las escenas de una parte
 def imprimir_parte(parte, funcion=imprimir_escena):
     print("")
     print("===  Parte  ===")
+    print("")
+    print("Grandeza total de la parte: ", parte.getGrandeza())
     INORDER(parte.getEscenas().getRaiz(), funcion)
 
 #Imprimir las partes de un espectaculo
@@ -126,37 +147,14 @@ def imprimir_espectaculo(espectaculo, funcion=imprimir_parte):
     print("")
     INORDER(espectaculo.getPartes().getRaiz(), funcion)
 
-#Complejidad O(n), ya que cada animal es accedido una sola vez
-def REPETICION_ANIMALES(nodo, diccionario):
-    def dfs(nodo):
-        if nodo is not None:
-            nombre_animal = nodo.getValor().getNombreAnimal()
-            if nombre_animal in diccionario:
-                diccionario[nombre_animal] += 1
-            else:
-                diccionario[nombre_animal] = 1
-            dfs(nodo.getHijoIzq())
-            dfs(nodo.getHijoDer())
-    dfs(nodo)
-
-#Complejidad (n) ya que cada escena es accedida una sola vez
-def REPETICION(nodo, diccionario):
-    if nodo != None:
-        REPETICION(nodo.getHijoIzq(), diccionario)  
-        REPETICION_ANIMALES(nodo.getValor().getAnimales().getRaiz(), diccionario)  
-        REPETICION(nodo.getHijoDer(), diccionario)
-    return diccionario    
-
-#Complejidad O(n) ya que cada clave en el diccionario es accedida una sola vez
-def hallarRepeticion(partes, diccionario, buscarMayor):
+#Complejidad O(n)
+def hallarRepeticion(buscarMayor):
     lista = []
     repeticiones = 0
-    for i in range(len(partes)):
-        dicc = REPETICION(partes[i].getEscenas().getRaiz(), diccionario)
-    for key, value in dicc.items():
-        if lista and ((buscarMayor and value > dicc[lista[-1]]) or (not buscarMayor and value < dicc[lista[-1]])):
+    for key, value in diccionario.items():
+        if lista and ((buscarMayor and value > diccionario[lista[-1]]) or (not buscarMayor and value < diccionario[lista[-1]])):
             lista[-1] = key
-        elif not lista or value == dicc[lista[-1]]:
+        elif not lista or value == diccionario[lista[-1]]:
             lista.append(key)  
             repeticiones = value
     return lista, repeticiones

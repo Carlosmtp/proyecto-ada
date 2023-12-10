@@ -34,6 +34,9 @@ class Nodo:
     def setColor(self, color):
         self.color = color
 
+#Para guardar la frecuencia de los elementos
+diccionario = {}
+
 #Clase Arbol
 class ArbolRN:
     def __init__(self):
@@ -47,6 +50,16 @@ class ArbolRN:
     def TREE_INSERT (self, nodo):
         y = None
         x = self.raiz
+
+        #Si el nodo no es None y si es un animal
+        if nodo != None and nodo.getValor().getTipoObjeto() == "Animal":
+            #Si el nodo ya existe, aumente su frecuencia
+            if nodo.getValor().getNombreAnimal() in diccionario:
+                diccionario[nodo.getValor().getNombreAnimal()] += 1
+            #Si el nodo no existe, agregue el nodo y su frecuencia
+            else:
+                diccionario[nodo.getValor().getNombreAnimal()] = 1
+
         #Mientras x no sea nulo, busca la posición del nodo
         while x != None:
             y = x
@@ -169,17 +182,7 @@ class ArbolRN:
         x = self.raiz
         while x.getHijoIzq() != None:
             x = x.getHijoIzq()
-        return x.getValor()
-
-    #Complejidad O(logn)        
-    def TREE_SEARCH(self, nodo):
-        x = self.raiz
-        while x != None and nodo.getValor().getGrandeza() != self.getValor().getGrandeza():
-            if nodo.getValor().getGrandeza() < x.getValor().getGrandeza():
-                x = x.getHijoIzq()
-            else:
-                x.getHijoDer()   
-        return x.getValor()         
+        return x.getValor()     
 
     #Complejidad O(n)
     def print_tree(self):

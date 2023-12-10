@@ -7,7 +7,7 @@ def leer_archivo(filename):
     animales = {} 
     apertura = Parte()
     espectaculo = Espectaculo()
-    partes = []
+    
     with open(filename, 'r') as file:
         n, m, k = map(int, file.readline().split())
         file.readline()
@@ -24,7 +24,6 @@ def leer_archivo(filename):
             escena.agregar_animal(animales[ani2])
             escena.agregar_animal(animales[ani3])
             apertura.agregar_escena(escena) 
-        partes.append(apertura)
         espectaculo.setApertura(apertura)    
         file.readline().split()
         for i in range(m-1):
@@ -37,10 +36,9 @@ def leer_archivo(filename):
                 escena.agregar_animal(animales[ani3])
                 parte.agregar_escena(escena) 
             espectaculo.agregar_parte(parte)
-            partes.append(parte)    
-    return n, m, k, animales, partes, apertura, espectaculo
+    return n, m, k, animales, apertura, espectaculo
 
-n, m, k, animales, partes, apertura, espectaculo = leer_archivo("./entrada2.txt")
+n, m, k, animales, apertura, espectaculo = leer_archivo("./entrada2.txt")
 
 
 
