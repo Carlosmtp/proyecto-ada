@@ -154,6 +154,7 @@ def hallarRepeticion(buscarMayor):
     for key, value in diccionario.items():
         if lista and ((buscarMayor and value > diccionario[lista[-1]]) or (not buscarMayor and value < diccionario[lista[-1]])):
             lista[-1] = key
+            repeticiones = value
         elif not lista or value == diccionario[lista[-1]]:
             lista.append(key)  
             repeticiones = value
