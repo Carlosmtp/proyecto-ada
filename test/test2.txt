@@ -12,20 +12,20 @@ Leon 9
 
 Caiman Capibara Loro
 Boa Caiman Capibara
-Cocodrilo Capibara Loro 
-Panteranegra Cocodrilo Loro 
-Tigre Loro Capibara 
-Leon Caiman Loro 
+Cocodrilo Capibara Loro
+Panteranegra Cocodrilo Loro
+Tigre Loro Capibara
+Leon Caiman Loro
 Leon Cocodrilo Boa
-Leon Panteranegra Cebra 
+Leon Panteranegra Cebra
 Tigre Cebra Panteranegra
 
 Caiman Capibara Loro
 Tigre Loro Capibara
 Tigre Cebra Panteranegra
-Panteranegra Cocodrilo Loro 
+Panteranegra Cocodrilo Loro
 Leon Panteranegra Cebra
 Cocodrilo Capibara Loro
-Boa Caiman Capibara 
+Boa Caiman Capibara
 Leon Caiman Loro
 Leon Cocodrilo Boa
