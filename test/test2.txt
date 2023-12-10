@@ -1,0 +1,31 @@
+9 4 3
+
+Capibara 1
+Loro 2
+Caiman 3
+Boa 4
+Cocodrilo 5
+Cebra 6
+Panteranegra 7
+Tigre 8
+Leon 9
+
+Caiman Capibara Loro
+Boa Caiman Capibara
+Cocodrilo Capibara Loro
+Panteranegra Cocodrilo Loro
+Tigre Loro Capibara
+Leon Caiman Loro
+Leon Cocodrilo Boa
+Leon Panteranegra Cebra
+Tigre Cebra Panteranegra
+
+Caiman Capibara Loro
+Tigre Loro Capibara
+Tigre Cebra Panteranegra
+Panteranegra Cocodrilo Loro
+Leon Panteranegra Cebra
+Cocodrilo Capibara Loro
+Boa Caiman Capibara
+Leon Caiman Loro
+Leon Cocodrilo Boa
