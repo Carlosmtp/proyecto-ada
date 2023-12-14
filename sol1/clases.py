@@ -15,6 +15,9 @@ class Animal:
     
     def getTipoObjeto(self):
         return self.tipoObjeto
+    
+    def getMaximo(self):
+        return self.grandeza
 
 #Clase Escena
 class Escena:
@@ -76,6 +79,9 @@ class Parte:
     
     def getTipoObjeto(self):
         return self.tipoObjeto
+    
+    def getMaximo(self):
+        return self.escenas.TREE_MAXIMUM().getGrandeza()
 
 #Clase Espectaculo    
 class Espectaculo:
@@ -114,6 +120,9 @@ class Espectaculo:
 
     def getTipoObjeto(self):
         return self.tipoObjeto    
+    
+    def getMaximo(self):
+        return self.partes.TREE_MAXIMUM().getGrandeza()
 
 
 #Funciones necesarias 

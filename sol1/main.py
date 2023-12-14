@@ -32,6 +32,7 @@ def main():
     print("")
     print("El promedio de grandeza de todo el espectaculo fue: ")
     print(round(apertura.getPromedioGrandeza(), 2))
+    
 
 inicio = time()
 main()
