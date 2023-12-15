@@ -1,8 +1,9 @@
-from entrada import *
+from entrada import leer_archivo
 from clases import hallarRepeticion, imprimir_parte, imprimir_espectaculo, imprimir_escena
 from time import time
 
-def main():
+def main(filename):
+    n, m, k, animales, apertura, espectaculo = leer_archivo(filename)
     print("=========== APERTURA ==============")
     imprimir_parte(apertura)
     print("")
@@ -35,7 +36,7 @@ def main():
 
 
 inicio = time()
-main()
+main("../test/test5.txt")
 fin = time()
 
 print("")
