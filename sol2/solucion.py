@@ -133,8 +133,8 @@ def main(filename):
     print("Promedio de grandeza:\n",promedio)
 
 inicio = time()
-main("../test/test8.txt")    
+main("../test/test5.txt")    
 fin = time()
 
 print("")
-print("Tiempo de ejecución: ", fin-inicio, " segundos")
+print("Tiempo de ejecución: ", round(fin-inicio,5), " segundos")
