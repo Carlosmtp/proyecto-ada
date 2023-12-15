@@ -133,7 +133,7 @@ def main(filename):
     print("Promedio de grandeza:\n",promedio)
 
 inicio = time()
-main("../test/error.txt")    
+main("../test/test2.txt")    
 fin = time()
 
 print("")
