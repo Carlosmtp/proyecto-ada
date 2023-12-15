@@ -1,4 +1,5 @@
 from time import time
+import argparse
 
 def leer_archivo(filename):
     n=0
@@ -108,6 +109,7 @@ def promedio_grandeza(apertura):
     return apertura[1]/((m-1)*k)
 
 def main(filename):
+    inicio = time()
     global n, m, k, animales, apertura, partes
     n, m, k, animales, apertura, partes = leer_archivo(filename)
     participaciones=participacion_animales(apertura)
@@ -124,10 +126,11 @@ def main(filename):
     print("Escena mayor grandeza:\n", escena_mayor_grandeza,"\n")
     promedio = promedio_grandeza(apertura_sorted)
     print("Promedio de grandeza:\n",promedio)
+    fin = time()
+    print("\n","Tiempo de ejecución: ", round(fin-inicio,5), " segundos")
 
-inicio = time()
-main("../test/test5.txt")    
-fin = time()
-
-print("")
-print("Tiempo de ejecución: ", round(fin-inicio,5), " segundos")
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("filename", help="Nombre del archivo de entrada")
+    args = parser.parse_args()
+    main(args.filename)

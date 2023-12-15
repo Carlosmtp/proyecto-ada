@@ -11,6 +11,8 @@
 
 
 #### Ejecución
+En la carpeta raiz del proyecto:
 ```
-python -c "from <solución[1-3]> import main; main('test/test1.txt')"
+python sol[1-3]/main.py test/test[1-9].txt
 ```
+test7.txt y test8,txt son las entradas ejemplo que están en el enunciado del proyecto

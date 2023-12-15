@@ -1,8 +1,10 @@
 from entrada import leer_archivo
 from clases import hallarRepeticion, imprimir_parte, imprimir_espectaculo, imprimir_escena
 from time import time
+import argparse
 
 def main(filename):
+    inicio = time()
     n, m, k, animales, apertura, espectaculo = leer_archivo(filename)
     print("=========== APERTURA ==============")
     imprimir_parte(apertura)
@@ -33,11 +35,11 @@ def main(filename):
     print("")
     print("El promedio de grandeza de todo el espectaculo fue: ")
     print(round(apertura.getPromedioGrandeza(), 2))
+    fin = time()
+    print("\n", "Tiempo de ejecución: ", round(fin-inicio,5), " segundos")
 
-
-inicio = time()
-main("../test/test5.txt")
-fin = time()
-
-print("")
-print("Tiempo de ejecución: ", round(fin-inicio,5), " segundos")
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("filename", help="Nombre del archivo de entrada")
+    args = parser.parse_args()
+    main(args.filename)
