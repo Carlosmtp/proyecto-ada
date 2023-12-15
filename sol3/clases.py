@@ -15,6 +15,9 @@ class Animal:
     
     def getTipoObjeto(self):
         return self.tipoObjeto
+    
+    def getMaximo(self):
+        return self.grandeza
 
 #Clase Escena
 class Escena:
@@ -76,6 +79,9 @@ class Parte:
     
     def getTipoObjeto(self):
         return self.tipoObjeto
+    
+    def getMaximo(self):
+        return self.escenas.TREE_MAXIMUM().getGrandeza()
 
 #Clase Espectaculo    
 class Espectaculo:
@@ -114,6 +120,9 @@ class Espectaculo:
 
     def getTipoObjeto(self):
         return self.tipoObjeto    
+    
+    def getMaximo(self):
+        return self.partes.TREE_MAXIMUM().getGrandeza()
 
 
 #Funciones necesarias 
@@ -150,25 +159,18 @@ def imprimir_espectaculo(espectaculo, funcion=imprimir_parte):
 #Complejidad O(n), ya que debe recorrer todo el diccionario, el diccionario 
 # guarda los valores de los animales y su frecuencia en los arboles
 #Buscar el mayor o menor valor del diccionario y devuelve una lista con los keys y el valor
-def hallarRepeticion(buscarMayor):
-    lista = []
-    repeticiones = 0
-    #Recorre el diccionario
-    for key, value in diccionario.items():
-        #Si la lista no está vacía y si el valor es mayor al último valor de la lista
-        #Si buscarMayor es True, busca el mayor, sino busca el menor
-        if lista and ((buscarMayor and value > diccionario[lista[-1]]) or (not buscarMayor and value < diccionario[lista[-1]])):
-            #Reemplaza el último key de la lista por el nuevo key
-            lista[-1] = key
-            #Reemplaza el número de repeticiones por el nuevo valor
-            repeticiones = value
-        #Si la lista está vacía o si el valor es igual al último valor de la lista    
-        elif not lista or value == diccionario[lista[-1]]:
-            #Agrega el key a la lista
-            lista.append(key)  
-            #Actualice el número de repeticiones
-            repeticiones = value
-    return lista, repeticiones
+def hallarRepeticion(get_max=True):
+    extreme_value = None
+    extreme_animals = []
+
+    for animal, value in diccionario.items():
+        if extreme_value is None or (get_max and value > extreme_value) or (not get_max and value < extreme_value):
+            extreme_value = value
+            extreme_animals = [animal]
+        elif value == extreme_value:
+            extreme_animals.append(animal)
+
+    return extreme_animals, extreme_value
 
 
 

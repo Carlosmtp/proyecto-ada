@@ -11,7 +11,7 @@ def leer_archivo(filename):
     with open(filename, 'r') as file:
         n, m, k = map(int, file.readline().split())
         file.readline()
-        #Crear objetos de animales y alamcenarlos en un diccionario
+        #Crear objetos de animales y almacenarlos en un diccionario
         for i in range(n):
             animal, grandeza = file.readline().strip().split()
             animales[animal] = Animal(animal, int(grandeza))
@@ -39,6 +39,7 @@ def leer_archivo(filename):
     return n, m, k, animales, apertura, espectaculo
 
 n, m, k, animales, apertura, espectaculo = leer_archivo("../test/test5.txt")
+
 
 
 

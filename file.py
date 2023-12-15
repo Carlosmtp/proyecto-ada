@@ -9,19 +9,19 @@
 #         archivo.write(f"{animal} {i}\n")
 
 # Genera escenas diferentes
-# from itertools import combinations
+from itertools import combinations
 
-# # Generar una lista de 2000 animales
-# animales = [f"Animal{i}" for i in range(1, 50)]
+# Generar una lista de 2000 animales
+animales = [f"Animal{i}" for i in range(1, 50)]
 
-# # Generar todas las combinaciones posibles de tres animales
-# combinaciones = list(combinations(animales, 3))
+# Generar todas las combinaciones posibles de tres animales
+combinaciones = list(combinations(animales, 3))
 
-# # Seleccionar las primeras 2000 combinaciones
-# combinaciones_seleccionadas = combinaciones[:15000]
+# Seleccionar las primeras 2000 combinaciones
+combinaciones_seleccionadas = combinaciones[:11000]
 
-# # Abrir el archivo en modo de escritura
-# with open('combinaciones.txt', 'w') as f:
-#     # Escribir las combinaciones seleccionadas en el archivo
-#     for combinacion in combinaciones_seleccionadas:
-#         f.write(' '.join(combinacion) + '\n')
+# Abrir el archivo en modo de escritura
+with open('combinaciones.txt', 'w') as f:
+    # Escribir las combinaciones seleccionadas en el archivo
+    for combinacion in combinaciones_seleccionadas:
+        f.write(' '.join(combinacion) + '\n')
