@@ -248,3 +248,12 @@ def menorGrandeza(pilaAnimales, pilaApertura):
       pilaApertura.apilar(pila_apertura_copia.desapilar())
 
   return elemento_minimo
+
+  def leer_archivo(filename):
+
+
+    if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("filename", help="Nombre del archivo de entrada")
+    args = parser.parse_args()
+    main(args.filename)
