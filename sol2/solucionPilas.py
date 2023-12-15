@@ -92,6 +92,30 @@ def dividir_y_agrupar_pila(original, x):
 
   return pila_de_pilas
 
+def max(conteo_animales):
+  if not conteo_animales:
+      return None
+  
+  max_frecuencia = float('-inf')
+  
+  for frecuencia in conteo_animales.values():
+      if frecuencia > max_frecuencia:
+          max_frecuencia = frecuencia
+  
+  return max_frecuencia
+  
+def min(conteo_animales):
+  if not conteo_animales:
+      return None
+  
+  min_frecuencia = float('inf')
+  
+  for frecuencia in conteo_animales.values():
+      if frecuencia < min_frecuencia:
+          min_frecuencia = frecuencia
+  
+  return min_frecuencia
+
 
 def mayorParticipacion(pilaApertura):
   # Crear una copia de la pila original para evitar modificarla
@@ -122,7 +146,9 @@ def mayorParticipacion(pilaApertura):
   
 
   # Encontrar la frecuencia mínima
-  frecuencia_maxima = max(conteo_animales.values())
+  frecuencia_maxima = max(conteo_animales)
+
+  print(frecuencia_maxima)
 
   # Encontrar todos los animales con la frecuencia mínima
   animales_mas_repetidos = [
@@ -160,7 +186,7 @@ def menorParticipacion(pilaApertura):
   conteo_animales = {animal: conteo * 2 for animal, conteo in conteo_animales.items()}
   
   # Encontrar la frecuencia mínima
-  frecuencia_minima = min(conteo_animales.values())
+  frecuencia_minima = min(conteo_animales)
 
   # Encontrar todos los animales con la frecuencia mínima
   animales_menos_repetidos = [
