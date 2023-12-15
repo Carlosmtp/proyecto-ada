@@ -87,13 +87,6 @@ def ordenarParte(parte, grandezas):
     return parte, grandeza
 
 def ordenarPartes(partes, grandezas):
-    grandeza_total = 0
-    for i in range(m - 1):
-        parte, grandeza = ordenarParte(partes[i], grandezas)
-        grandeza_total += grandeza
-    partes = sorted(partes, key=lambda x: x[1], reverse=False)
-    return partes, grandeza_total
-def ordenarPartes(partes, grandezas):
     grandeza=0
     for i in range(m-1):
         partes[i]=ordenarParte(partes[i],grandezas)
