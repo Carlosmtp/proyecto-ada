@@ -38,7 +38,7 @@ def leer_archivo(filename):
             espectaculo.agregar_parte(parte)
     return n, m, k, animales, apertura, espectaculo
 
-n, m, k, animales, apertura, espectaculo = leer_archivo("../test/test6.txt")
+n, m, k, animales, apertura, espectaculo = leer_archivo("../test/test7.txt")
 
 
 

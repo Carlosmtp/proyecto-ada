@@ -83,21 +83,39 @@ def ordenarParte(parte, grandezas):
 
 def ordenarPartes(partes, grandezas):
     grandeza=0
+    m = len(partes)
     for i in range(m-1):
         partes[i]=ordenarParte(partes[i],grandezas)
         grandeza+=partes[i][1]
-    for i in range(m-2):
-        for j in range(m-2):
+    for i in range(m-1):
+        for j in range(m-i-1):
             if partes[j][1]>partes[j+1][1]:
                 aux=partes[j]
                 partes[j]=partes[j+1]
                 partes[j+1]=aux
             elif partes[j][1]==partes[j+1][1]:
-                if grandezas[partes[j][0][0][2]]>grandezas[partes[j+1][0][0][2]]:
+                if len(partes[j][0]) > 2 and len(partes[j + 1][0]) > 2 and grandezas[partes[j][0][2]] > grandezas[partes[j + 1][0][2]]:
                     aux = partes[j]
                     partes[j] = partes[j + 1]
                     partes[j + 1] = aux
     return partes
+# def ordenarPartes(partes, grandezas):
+#     grandeza=0
+#     for i in range(m-1):
+#         partes[i]=ordenarParte(partes[i],grandezas)
+#         grandeza+=partes[i][1]
+#     for i in range(m-2):
+#         for j in range(m-2):
+#             if partes[j][1]>partes[j+1][1]:
+#                 aux=partes[j]
+#                 partes[j]=partes[j+1]
+#                 partes[j+1]=aux
+#             elif partes[j][1]==partes[j+1][1]:
+#                 if grandezas[partes[j][0][0][2]]>grandezas[partes[j+1][0][0][2]]:
+#                     aux = partes[j]
+#                     partes[j] = partes[j + 1]
+#                     partes[j + 1] = aux
+#     return partes
 
 def promedio_grandeza(apertura):
     return apertura[1]/((m-1)*k)
@@ -121,8 +139,8 @@ def main(filename):
     print("Promedio de grandeza:\n",promedio)
 
 inicio = time()
-main("../test/test5.txt")    
+main("../test/test7.txt")    
 fin = time()
 
 print("")
-print("Tiempo de ejecución: ", fin-inicio, " segundos")
+print("Tiempo de ejecución: ", round(fin-inicio,5), " segundos")
