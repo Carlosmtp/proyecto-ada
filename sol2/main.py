@@ -289,35 +289,63 @@ def Promedio(pilaAnimales, pilaApertura):
 
   return (suma_total)/((m-1)*k)
 
+def ordenarAnimales(pilaAnimales, tripleta):
+    # Obtener la lista de animales junto con sus grandezas
+    animales_con_grandezas = [(animal, next((grandeza for a, grandeza in pilaAnimales.ver_pila() if a == animal), float('inf')))
+                              for animal in tripleta]
+
+    # Aplicar el algoritmo Bubble Sort para ordenar la lista de animales por grandeza en orden ascendente
+    n = len(animales_con_grandezas)
+    for i in range(n - 1):
+        for j in range(0, n - i - 1):
+            if animales_con_grandezas[j][1] > animales_con_grandezas[j + 1][1] or (
+                animales_con_grandezas[j][1] == animales_con_grandezas[j + 1][1] and
+                animales_con_grandezas[j][0] > animales_con_grandezas[j + 1][0]
+            ):
+                animales_con_grandezas[j], animales_con_grandezas[j + 1] = animales_con_grandezas[j + 1], animales_con_grandezas[j]
+
+    # Crear la tripleta ordenada
+    tripleta_ordenada = tuple(animal for animal, _ in animales_con_grandezas)
+
+    return tripleta_ordenada
+
 def ordenarApertura(pilaAnimales, pilaApertura):
-    # Crear una lista temporal para almacenar las tripletas junto con su suma de grandezas
-    tripletas_con_suma = []
+  # Crear una lista temporal para almacenar las tripletas junto con su suma de grandezas
+  tripletas_con_suma = []
 
-    # Crear una copia de la pila original para evitar modificarla
-    pilaApertura_copia = Pila()
+  # Procesar cada tripleta en pilaApertura
+  while not pilaApertura.esta_vacia():
+      tripleta = pilaApertura.desapilar()
 
-    # Calcular la suma de grandezas para cada tripleta y almacenarla en la lista temporal
-    while not pilaApertura.esta_vacia():
-        tripleta = pilaApertura.desapilar()
-        pilaApertura_copia.apilar(tripleta)  # Apilar en la copia
-        suma_tripleta = sum(grandeza for animal, grandeza in pilaAnimales.ver_pila() if animal in tripleta)
-        tripletas_con_suma.append((tripleta, suma_tripleta))
+      # Ordenar la tripleta por grandeza de animales utilizando Bubble Sort
+      tripleta_ordenada = ordenarAnimales(pilaAnimales, tripleta)
 
-    # Restaurar la pila original con la copia
-    while not pilaApertura_copia.esta_vacia():
-        pilaApertura.apilar(pilaApertura_copia.desapilar())
+      # Calcular la suma de grandezas para la tripleta ordenada
+      suma_tripleta = sum(grandeza for animal, grandeza in pilaAnimales.ver_pila() if animal in tripleta_ordenada)
 
-    # Ordenar la lista temporal por la suma de grandezas en orden ascendente
-    tripletas_con_suma = ordenar_lista(tripletas_con_suma)
+      # Almacenar la tripleta ordenada junto con su suma de grandezas en la lista temporal
+      tripletas_con_suma.append((tripleta_ordenada, suma_tripleta))
 
-    # Crear una nueva pila ordenada
-    pila_ordenada = Pila()
+  # Aplicar el algoritmo Bubble Sort para ordenar la lista temporal por la suma de grandezas en orden ascendente
+  n = len(tripletas_con_suma)
+  for i in range(n - 1):
+      for j in range(0, n - i - 1):
+          if tripletas_con_suma[j][1] > tripletas_con_suma[j + 1][1] or (
+              tripletas_con_suma[j][1] == tripletas_con_suma[j + 1][1] and
+              tripletas_con_suma[j][0] > tripletas_con_suma[j + 1][0]
+          ):
+              tripletas_con_suma[j], tripletas_con_suma[j + 1] = tripletas_con_suma[j + 1], tripletas_con_suma[j]
 
-    # Apilar las tripletas ordenadas en la pila ordenada
-    for tripleta, _ in tripletas_con_suma:
-        pila_ordenada.apilar(tripleta)
+  # Crear una nueva pila ordenada
+  pila_apertura_ordenada = Pila()
 
-    return pila_ordenada
+  # Apilar las tripletas ordenadas en la pila ordenada
+  for tripleta, _ in tripletas_con_suma:
+      pila_apertura_ordenada.apilar(tripleta)
+      pilaApertura.apilar(tripleta)
+
+  return pila_apertura_ordenada
+
 
 def ordenarPartes(pilaAnimales, pilaPartes):
   # Crear una lista temporal para almacenar todas las tripletas con su suma de grandezas
