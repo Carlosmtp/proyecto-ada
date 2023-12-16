@@ -64,6 +64,7 @@ def leer_archivo(filename):
 
   return n, m, k, pilaAnimales, pilaApertura, pilaPartes
 
+#Funciones auxiliares
 
 def dividir_y_agrupar_pila(original, x):
   # Crear una lista de pilas para almacenar las partes
@@ -119,6 +120,11 @@ def min(conteo_animales):
   
   return min_frecuencia
 
+def sum(secuencia):
+    resultado = 0
+    for elemento in secuencia:
+        resultado += elemento
+    return resultado
 
 def mayorParticipacion(pilaApertura):
   # Crear una copia de la pila original para evitar modificarla
