@@ -250,144 +250,83 @@ def menorGrandeza(pilaAnimales, pilaApertura):
 
   return elemento_minimo
 
-def ordenar_escenas_por_grandeza(pilaEscenas, pilaAnimales):
-    # Crear una pila temporal para almacenar las escenas ordenadas
-    pila_temporal = Pila()
+def Promedio(pilaAnimales, pilaApertura):
+  suma_total = 0
 
-    # Calcular la grandeza total de cada escena y almacenarla en una lista
-    grandeza_total_escenas = []
-    while not pilaEscenas.esta_vacia():
-        escena = pilaEscenas.desapilar()
-        grandeza_total = sum(grandeza for animal, grandeza in pilaAnimales.ver_pila() if animal in escena)
-        grandeza_total_escenas.append((escena, grandeza_total))
+  # Crear una copia de pilaApertura para evitar modificar la original
+  pila_apertura_copia = Pila()
 
-    # Ordenar la lista de escenas según la grandeza total
-    grandeza_total_escenas.sort(key=lambda x: x[1])
+  while not pilaApertura.esta_vacia():
+      tripleta = pilaApertura.desapilar()
+      pila_apertura_copia.apilar(tripleta)  # Apilar en la copia
 
-    # Apilar las escenas ordenadas en la pila temporal
-    for escena, _ in grandeza_total_escenas:
-        pila_temporal.apilar(escena)
+      # Calcular la suma de grandezas para la tripleta actual
+      suma_tripleta = sum(grandeza for animal, grandeza in pilaAnimales.ver_pila() if animal in tripleta)
 
-    # Restaurar la pila original con las escenas ordenadas
-    while not pila_temporal.esta_vacia():
-        pilaEscenas.apilar(pila_temporal.desapilar())
+      suma_total += suma_tripleta
 
-# Imprimir las escenas ordenadas
-#print("Escenas ordenadas por grandeza:")
-#while not pilaEscenas.esta_vacia():
-#    print(pilaEscenas.desapilar())
+  # Restaurar la pilaApertura con la copia
+  while not pila_apertura_copia.esta_vacia():
+      pilaApertura.apilar(pila_apertura_copia.desapilar())
 
+  return (suma_total)/((m-1)*k)
 
+def ordenarApertura(pilaAnimales, pilaApertura):
+    # Crear una lista temporal para almacenar las tripletas junto con su suma de grandezas
+    tripletas_con_suma = []
 
+    # Crear una copia de la pila original para evitar modificarla
+    pilaApertura_copia = Pila()
 
-
-#Ordenar Partes
-def ordenar_partes_por_grandeza(pilaPartes, pilaAnimales):
-    # Crear una pila temporal para almacenar las partes ordenadas
-    pila_temporal = Pila()
-
-    # Calcular la grandeza total de cada parte y almacenarla en una lista
-    grandeza_total_partes = []
-    while not pilaPartes.esta_vacia():
-        parte = pilaPartes.desapilar()
-        grandeza_total_parte = sum(sum(grandeza for animal, grandeza in pilaAnimales.ver_pila() if animal in escena) for escena in parte)
-        grandeza_total_partes.append((parte, grandeza_total_parte))
-
-    # Ordenar la lista de partes según la grandeza total
-    grandeza_total_partes.sort(key=lambda x: x[1])
-
-    # Apilar las partes ordenadas en la pila temporal
-    for parte, _ in grandeza_total_partes:
-        pila_temporal.apilar(parte)
-
-    # Restaurar la pila original con las partes ordenadas
-    while not pila_temporal.esta_vacia():
-        pilaPartes.apilar(pila_temporal.desapilar())
-
-
-# Imprimir las partes ordenadas
-#print("Partes ordenadas por grandeza total:")
-#while not pilaPartes.esta_vacia():
-#    parte = pilaPartes.desapilar()
-#    print("Parte:")
-#    for escena in parte:
-#        print(escena)
-#    print("---")
-
-
-
-
-#Promedio de grandeza de todo el espectaculo
-def calcular_promedio_grandeza_espectaculo(pilaApertura, pilaPartes, pilaAnimales):
-    # Crear una lista para almacenar todas las escenas del espectáculo
-    todas_las_escenas = []
-
-    # Copiar las escenas de la apertura a la lista
+    # Calcular la suma de grandezas para cada tripleta y almacenarla en la lista temporal
     while not pilaApertura.esta_vacia():
-        todas_las_escenas.append(pilaApertura.desapilar())
+        tripleta = pilaApertura.desapilar()
+        pilaApertura_copia.apilar(tripleta)  # Apilar en la copia
+        suma_tripleta = sum(grandeza for animal, grandeza in pilaAnimales.ver_pila() if animal in tripleta)
+        tripletas_con_suma.append((tripleta, suma_tripleta))
 
-    # Copiar las escenas de las m-1 partes siguientes a la lista
-    while not pilaPartes.esta_vacia():
-        parte = pilaPartes.desapilar()
-        todas_las_escenas.extend(parte)
+    # Restaurar la pila original con la copia
+    while not pilaApertura_copia.esta_vacia():
+        pilaApertura.apilar(pilaApertura_copia.desapilar())
 
-    # Calcular la grandeza total de todas las escenas y sumarlas
-    suma_grandezas_totales = sum(sum(grandeza for animal, grandeza in pilaAnimales.ver_pila() if animal in escena) for escena in todas_las_escenas)
+    # Ordenar la lista temporal por la suma de grandezas en orden ascendente
+    tripletas_con_suma.sort(key=lambda x: x[1])
 
-    # Calcular el promedio de grandeza
-    numero_total_escenas = len(todas_las_escenas)
-    if numero_total_escenas > 0:
-        promedio_grandeza = suma_grandezas_totales / numero_total_escenas
-        return promedio_grandeza
-    else:
-        return 0  # Devolver 0 si no hay escenas en el espectáculo
+    # Crear una nueva pila ordenada
+    pila_ordenada = Pila()
 
+    # Apilar las tripletas ordenadas en la pila ordenada
+    for tripleta, _ in tripletas_con_suma:
+        pila_ordenada.apilar(tripleta)
 
-# Imprimir el resultado
-#print(f"Promedio de grandeza del espectáculo: {promedio_grandeza_espectaculo}")
+    return pila_ordenada
 
-def contar_participacion_animales(pilaApertura, pilaPartes):
-    # Crear un diccionario para almacenar el conteo de participación de cada animal
-    conteo_participacion = {}
+def ordenarPartes(pilaAnimales, pilaPartes):
+  # Crear una lista temporal para almacenar todas las tripletas con su suma de grandezas
+  lista_con_suma = []
 
-    # Función auxiliar para actualizar el conteo de un animal
-    def actualizar_conteo(animal):
-        conteo_participacion[animal] = conteo_participacion.get(animal, 0) + 1
+  # Procesar cada pila de tripletas en pilaPartes
+  while not pilaPartes.esta_vacia():
+      pila_parte = pilaPartes.desapilar()
 
-    # Contar la participación de animales en la apertura
-    while not pilaApertura.esta_vacia():
-        escena = pilaApertura.desapilar()
-        for animal in escena:
-            actualizar_conteo(animal)
+      # Calcular la suma de grandezas para cada tripleta y almacenarla en la lista temporal
+      while not pila_parte.esta_vacia():
+          tripleta = pila_parte.desapilar()
+          suma_tripleta = sum(grandeza for animal, grandeza in pilaAnimales.ver_pila() if animal in tripleta)
+          lista_con_suma.append((tripleta, suma_tripleta))
 
-    # Contar la participación de animales en las partes
-    while not pilaPartes.esta_vacia():
-        parte = pilaPartes.desapilar()
-        for escena in parte:
-            for animal in escena:
-                actualizar_conteo(animal)
+  # Ordenar la lista temporal por la suma de grandezas en orden ascendente
+  lista_con_suma.sort(key=lambda x: x[1])
 
-    return conteo_participacion
+  # Crear una nueva pila para almacenar las tripletas ordenadas
+  pila_ordenada = Pila()
 
+  # Apilar las tripletas ordenadas en la pila
+  for tripleta, _ in lista_con_suma:
+      pila_ordenada.apilar(tripleta)
+      pilaPartes.apilar(tripleta)
 
-def obtener_primera_escena(pila):
-    if not pila.esta_vacia():
-        # Utiliza el método ver_tope para obtener la primera escena sin quitarla de la pila
-        primera_escena = pila.ver_tope()
-        return primera_escena
-    else:
-        print("La pila está vacía")
-        return None
-
-def obtener_ultima_escena(pila):
-    if not pila.esta_vacia():
-        # Utiliza el método desapilar para extraer la última escena de la pila
-        ultima_escena = pila.desapilar()
-        return ultima_escena
-    else:
-        print("La pila está vacía")
-        return None
-
+  return pila_ordenada
 
 
 
@@ -398,27 +337,28 @@ def main(filename):
   global n, m, k, animales, apertura, partes
   n, m, k, animales, apertura, partes = leer_archivo(filename) 
   
-  apertura_sorteo = ordenar_escenas_por_grandeza(apertura, animales)
-  print("Apertura:\n", apertura_sorteo,"\n")
-  
-  partes_sorteo = ordenar_partes_por_grandeza(partes,animales)
-  print("Partes:\n", partes_sorteo,"\n")
 
-  participaciones = contar_participacion_animales(apertura) 
-  min_participacion = menorParticipacion(participaciones)
+  min_participacion = menorParticipacion(apertura)
   print("Animal con menor participacion:\n", min_participacion,"\n")
   
-  max_participacion = mayorParticipacion(participaciones)
+  max_participacion = mayorParticipacion(apertura)
   print("Animal con mayor participacion:\n", max_participacion,"\n")
   
-  escena_menor_grandeza = obtener_primera_escena(apertura_sorteo)
+  escena_menor_grandeza = menorGrandeza(animales,apertura)
   print("Escena con menor grandeza:\n", escena_menor_grandeza,"\n")
 
-  escena_mayor_grandeza = obtener_ultima_escena(apertura_sorteo)
+  escena_mayor_grandeza = mayorGrandeza(animales,apertura)
   print("Escena con mayor grandeza:\n", escena_mayor_grandeza,"\n")
+  
+  ordenar_apertura = (ordenarApertura(animales,apertura)).ver_pila()
+  print("Apertura ordenada ascendentemente:\n",ordenar_apertura,"\n")
 
-  promedio = calcular_promedio_grandeza_espectaculo(apertura_sorteo)
+  ordenar_partes = (ordenarPartes(animales,partes)).ver_pila()
+  print("Partes ordenadas ascendentemente:\n",ordenar_partes,"\n")
+
+  promedio = Promedio(animales, apertura)
   print("Promedio de grandeza:\n", promedio)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
