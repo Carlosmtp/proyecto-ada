@@ -1,4 +1,6 @@
+from time import time
 import argparse
+
 class Pila:
 
   def __init__(self):
@@ -328,6 +330,10 @@ def ordenarPartes(pilaAnimales, pilaPartes):
 
   return pila_ordenada
 
+def mostrarPilas(pila_de_pilas):
+  while not pila_de_pilas.esta_vacia():
+    pila_individual = pila_de_pilas.desapilar()
+    print(pila_individual.ver_pila())
 
 
 
@@ -337,6 +343,7 @@ def main(filename):
   global n, m, k, animales, apertura, partes
   n, m, k, animales, apertura, partes = leer_archivo(filename) 
   
+  inicio = time()
 
   min_participacion = menorParticipacion(apertura)
   print("Animal con menor participacion:\n", min_participacion,"\n")
@@ -353,11 +360,18 @@ def main(filename):
   ordenar_apertura = (ordenarApertura(animales,apertura)).ver_pila()
   print("Apertura ordenada ascendentemente:\n",ordenar_apertura,"\n")
 
-  ordenar_partes = (ordenarPartes(animales,partes)).ver_pila()
-  print("Partes ordenadas ascendentemente:\n",ordenar_partes,"\n")
+  (ordenarPartes(animales,partes))
+  nuevaPilaPartes = dividir_y_agrupar_pila(partes, k)
+  print("Partes ordenadas ascendentemente:\n") 
+  mostrarPilas(nuevaPilaPartes)
+  print("\n")
 
   promedio = Promedio(animales, apertura)
   print("Promedio de grandeza:\n", promedio)
+
+  fin = time()
+
+  print("\n","Tiempo de ejecución: ", round(fin-inicio,5), " segundos")
 
 
 if __name__ == "__main__":
