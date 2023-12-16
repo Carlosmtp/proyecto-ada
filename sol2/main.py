@@ -126,6 +126,16 @@ def sum(secuencia):
         resultado += elemento
     return resultado
 
+def ordenar_lista(lista):
+  n = len(lista)
+  
+  for i in range(n):
+      for j in range(0, n-i-1):
+          if lista[j][1] > lista[j+1][1]:
+              lista[j], lista[j+1] = lista[j+1], lista[j]
+  
+  return lista
+
 def mayorParticipacion(pilaApertura):
   # Crear una copia de la pila original para evitar modificarla
   pila_copiaAp = Pila()
@@ -298,7 +308,7 @@ def ordenarApertura(pilaAnimales, pilaApertura):
         pilaApertura.apilar(pilaApertura_copia.desapilar())
 
     # Ordenar la lista temporal por la suma de grandezas en orden ascendente
-    tripletas_con_suma.sort(key=lambda x: x[1])
+    tripletas_con_suma = ordenar_lista(tripletas_con_suma)
 
     # Crear una nueva pila ordenada
     pila_ordenada = Pila()
@@ -324,7 +334,7 @@ def ordenarPartes(pilaAnimales, pilaPartes):
           lista_con_suma.append((tripleta, suma_tripleta))
 
   # Ordenar la lista temporal por la suma de grandezas en orden ascendente
-  lista_con_suma.sort(key=lambda x: x[1])
+  lista_con_suma = ordenar_lista(lista_con_suma)
 
   # Crear una nueva pila para almacenar las tripletas ordenadas
   pila_ordenada = Pila()
