@@ -1,425 +1,322 @@
 from time import time
 import argparse
 
-class Pila:
+#Clase Nodo
+class Nodo:
+    def __init__(self, data, grandeza):
+        self.data = data 
+        self.next = None #almacenará el nodo siguiente
+        self.grandeza = grandeza #almacenará la grandeza de la tupla 
 
-  def __init__(self):
-    self.items = []
+    def getData(self):
+        return self.data
 
-  def esta_vacia(self):
-    return len(self.items) == 0
+    def getNext(self):
+        return self.next
+    
+    def getGrandeza(self):
+        return self.grandeza
 
-  def apilar(self, elemento):
-    self.items.append(elemento)
+    def setData(self, data):
+        self.data = data
 
-  def desapilar(self):
-    if not self.esta_vacia():
-      return self.items.pop()
-    else:
-      print("La pila está vacía")
+    def setNext(self, next):
+        self.next = next   
 
-  def ver_tope(self):
-    if not self.esta_vacia():
-      return self.items[-1]
-    else:
-      print("La pila está vacía")
+    def setGrandeza(self, grandeza):
+        self.grandeza = grandeza         
 
-  def ver_pila(self):
-    return self.items
+#Clase Lista Enlazada
+class LinkedList:
+    def __init__(self):
+        self.head = None #almacenará el primer nodo de la lista
 
+    def getHead(self):
+        return self.head   
 
+    def setHead(self, nodo):
+        self.head = nodo   
+
+    def insert(self, data, grandeza):
+        #El elemento a insertar será un nodo
+        new_node = Nodo(data, grandeza)
+        #Si la lista está vacía, el nuevo nodo será el primero
+        if not self.head:
+            self.head = new_node
+        #sino,   
+        else:
+            #se crea un nodo temporal que inicial mente será 
+            #el primer elemento de la lista
+            temp = self.head
+            #se recorre la lista hasta el último nodo y 
+            #se agrega el nuevo nodo.  
+            while temp.next:
+                #Esto hace que vaya pasando los nodos
+                temp = temp.next
+            #Cuando el último nodo tenga en next un None, significa que es el último, y se añade el nuevo valor en el next del nodo.    
+            temp.next = new_node
+
+# Complejidad O(n), donde n es el número de líneas en el archivo.
+#Lee un archivo y crea pilas que contiene pilas o tuplas.
 def leer_archivo(filename):
-  n = 0
-  m = 0
-  k = 0
-  pilaAnimales = Pila()
-  pilaApertura = Pila()
-  pilaPartes = Pila()
-
-  with open(filename, 'r') as file:
-    n, m, k = map(int, file.readline().split())
-    file.readline()
-    for i in range(n):
-      linea = file.readline().strip().split()
-      animal = linea[0]
-      grandeza = int(linea[1])
-      pilaAnimales.apilar((animal, grandeza))
-    file.readline()
-    for i in range((m - 1) * k):
-      linea = file.readline().strip().split()
-      animal1 = linea[0]
-      animal2 = linea[1]
-      animal3 = linea[2]
-      pilaApertura.apilar((animal1, animal2, animal3))
-    file.readline().split()
-    for i in range(m - 1):
-      pilaParte = Pila()
-      for j in range(k):
-        linea = file.readline().strip().split()
-        animal1 = linea[0]
-        animal2 = linea[1]
-        animal3 = linea[2]
-        pilaParte.apilar((animal1, animal2, animal3))
-      pilaPartes.apilar(pilaParte)
-
-  return n, m, k, pilaAnimales, pilaApertura, pilaPartes
-
-#Funciones auxiliares
-
-def dividir_y_agrupar_pila(original, x):
-  # Crear una lista de pilas para almacenar las partes
-  pilas_partes = [Pila() for _ in range(x)]
-
-  # Contar la cantidad total de elementos en la pila original
-  total_elementos = 0
-  pila_temporal = Pila()
-  while not original.esta_vacia():
-    elemento = original.desapilar()
-    pila_temporal.apilar(elemento)
-    total_elementos += 1
-
-  # Dividir los elementos en n partes
-  elementos_por_parte = total_elementos // x
-  for pila_parte in pilas_partes:
-    for _ in range(elementos_por_parte):
-      elemento = pila_temporal.desapilar()
-      pila_parte.apilar(elemento)
-
-  # Almacenar los elementos restantes en la última pila si es necesario
-  while not pila_temporal.esta_vacia():
-    pilas_partes[-1].apilar(pila_temporal.desapilar())
-
-  # Crear una pila de pilas
-  pila_de_pilas = Pila()
-  for pila_parte in reversed(pilas_partes):
-    pila_de_pilas.apilar(pila_parte)
-
-  return pila_de_pilas
-
-def max(conteo_animales):
-  if not conteo_animales:
-      return None
-  
-  max_frecuencia = float('-inf')
-  
-  for frecuencia in conteo_animales.values():
-      if frecuencia > max_frecuencia:
-          max_frecuencia = frecuencia
-  
-  return max_frecuencia
-  
-def min(conteo_animales):
-  if not conteo_animales:
-      return None
-  
-  min_frecuencia = float('inf')
-  
-  for frecuencia in conteo_animales.values():
-      if frecuencia < min_frecuencia:
-          min_frecuencia = frecuencia
-  
-  return min_frecuencia
-
-def sum(secuencia):
-    resultado = 0
-    for elemento in secuencia:
-        resultado += elemento
-    return resultado
-
-def ordenar_lista(lista):
-  n = len(lista)
-  
-  for i in range(n):
-      for j in range(0, n-i-1):
-          if lista[j][1] > lista[j+1][1]:
-              lista[j], lista[j+1] = lista[j+1], lista[j]
-  
-  return lista
-
-def mayorParticipacion(pilaApertura):
-  # Crear una copia de la pila original para evitar modificarla
-  pila_copiaAp = Pila()
-  pila_copiaP = Pila()
-
-  while not pilaApertura.esta_vacia():
-    animal1, animal2, animal3 = pilaApertura.desapilar()
-    pila_copiaAp.apilar((animal1, animal2, animal3))
-
-  # Contar la frecuencia de cada animal en la copia de la pilaApertura
-  conteo_animales = {}
-  while not pila_copiaAp.esta_vacia():
-    animal1, animal2, animal3 = pila_copiaAp.desapilar()
-
-    for animal in (animal1, animal2, animal3):
-      conteo_animales[animal] = conteo_animales.get(animal, 0) + 1
-
-    # Volver a apilar los elementos en la pila original
-    pilaApertura.apilar((animal1, animal2, animal3))
-
-  if not conteo_animales:
-    # No hay animales en las pilas originales.
-    return None
-
-  # Multiplicar el conteo por dos para contar su participación en las partes
-  conteo_animales = {animal: conteo * 2 for animal, conteo in conteo_animales.items()}
-  
-
-  # Encontrar la frecuencia mínima
-  frecuencia_maxima = max(conteo_animales)
-
-  print(frecuencia_maxima)
-
-  # Encontrar todos los animales con la frecuencia mínima
-  animales_mas_repetidos = [
-      animal for animal, frecuencia in conteo_animales.items()
-      if frecuencia == frecuencia_maxima
-  ]
-
-  #print(pilaPartes.ver_pila())
-  return animales_mas_repetidos
-
-
-def menorParticipacion(pilaApertura):
-  # Crear una copia de la pila original para evitar modificarla
-  pila_copia = Pila()
-  while not pilaApertura.esta_vacia():
-    animal1, animal2, animal3 = pilaApertura.desapilar()
-    pila_copia.apilar((animal1, animal2, animal3))
-
-  # Contar la frecuencia de cada animal en la copia de la pilaApertura
-  conteo_animales = {}
-  while not pila_copia.esta_vacia():
-    animal1, animal2, animal3 = pila_copia.desapilar()
-
-    for animal in (animal1, animal2, animal3):
-      conteo_animales[animal] = conteo_animales.get(animal, 0) + 1
-
-    # Volver a apilar los elementos en la pila original
-    pilaApertura.apilar((animal1, animal2, animal3))
-
-  if not conteo_animales:
-    # No hay animales en las pilas originales.
-    return None
-
-  # Multiplicar el conteo por dos para contar su participación en las partes
-  conteo_animales = {animal: conteo * 2 for animal, conteo in conteo_animales.items()}
-  
-  # Encontrar la frecuencia mínima
-  frecuencia_minima = min(conteo_animales)
-
-  # Encontrar todos los animales con la frecuencia mínima
-  animales_menos_repetidos = [
-      animal for animal, frecuencia in conteo_animales.items()
-      if frecuencia == frecuencia_minima
-  ]
-
-  return animales_menos_repetidos
-
-
-def mayorGrandeza(pilaAnimales, pilaApertura):
-  suma_maxima = float('-inf')  # Inicializar con un valor muy bajo
-  elemento_maximo = None
-  
-  def calcular_suma(tripleta):
-      return sum(grandeza for animal, grandeza in pilaAnimales.ver_pila() if animal in tripleta)
-  
-  # Crear una copia de pilaApertura para evitar modificar la original
-  pila_apertura_copia = Pila()
-  
-  while not pilaApertura.esta_vacia():
-      tripleta = pilaApertura.desapilar()
-      pila_apertura_copia.apilar(tripleta)  # Apilar en la copia
-      suma_actual = calcular_suma(tripleta)
-  
-      if suma_actual > suma_maxima:
-          suma_maxima = suma_actual
-          elemento_maximo = tripleta
-  
-  # Restaurar la pilaApertura con la copia
-  while not pila_apertura_copia.esta_vacia():
-      pilaApertura.apilar(pila_apertura_copia.desapilar())
-  
-  return elemento_maximo
-
-
-def menorGrandeza(pilaAnimales, pilaApertura):
-  suma_minima = float('inf')  # Inicializar con un valor muy alto
-  elemento_minimo = None
-
-  def calcular_suma(tripleta):
-    return sum(grandeza for animal, grandeza in pilaAnimales.ver_pila()
-               if animal in tripleta)
-
-  # Crear una copia de pilaApertura para evitar modificar la original
-  pila_apertura_copia = Pila()
-
-  while not pilaApertura.esta_vacia():
-    tripleta = pilaApertura.desapilar()
-    pila_apertura_copia.apilar(tripleta)  # Apilar en la copia
-    suma_actual = calcular_suma(tripleta)
-
-    if suma_actual < suma_minima:
-      suma_minima = suma_actual
-      elemento_minimo = tripleta
-
-  # Restaurar la pilaApertura con la copia
-  while not pila_apertura_copia.esta_vacia():
-      pilaApertura.apilar(pila_apertura_copia.desapilar())
-
-  return elemento_minimo
-
-def Promedio(pilaAnimales, pilaApertura):
-  suma_total = 0
-
-  # Crear una copia de pilaApertura para evitar modificar la original
-  pila_apertura_copia = Pila()
-
-  while not pilaApertura.esta_vacia():
-      tripleta = pilaApertura.desapilar()
-      pila_apertura_copia.apilar(tripleta)  # Apilar en la copia
-
-      # Calcular la suma de grandezas para la tripleta actual
-      suma_tripleta = sum(grandeza for animal, grandeza in pilaAnimales.ver_pila() if animal in tripleta)
-
-      suma_total += suma_tripleta
-
-  # Restaurar la pilaApertura con la copia
-  while not pila_apertura_copia.esta_vacia():
-      pilaApertura.apilar(pila_apertura_copia.desapilar())
-
-  return (suma_total)/((m-1)*k)
-
-def ordenarAnimales(pilaAnimales, tripleta):
-    # Obtener la lista de animales junto con sus grandezas
-    animales_con_grandezas = [(animal, next((grandeza for a, grandeza in pilaAnimales.ver_pila() if a == animal), float('inf')))
-                              for animal in tripleta]
-
-    # Aplicar el algoritmo Bubble Sort para ordenar la lista de animales por grandeza en orden ascendente
-    n = len(animales_con_grandezas)
-    for i in range(n - 1):
-        for j in range(0, n - i - 1):
-            if animales_con_grandezas[j][1] > animales_con_grandezas[j + 1][1] or (
-                animales_con_grandezas[j][1] == animales_con_grandezas[j + 1][1] and
-                animales_con_grandezas[j][0] > animales_con_grandezas[j + 1][0]
-            ):
-                animales_con_grandezas[j], animales_con_grandezas[j + 1] = animales_con_grandezas[j + 1], animales_con_grandezas[j]
-
-    # Crear la tripleta ordenada
-    tripleta_ordenada = tuple(animal for animal, _ in animales_con_grandezas)
-
-    return tripleta_ordenada
-
-def ordenarApertura(pilaAnimales, pilaApertura):
-  # Crear una lista temporal para almacenar las tripletas junto con su suma de grandezas
-  tripletas_con_suma = []
-
-  # Procesar cada tripleta en pilaApertura
-  while not pilaApertura.esta_vacia():
-      tripleta = pilaApertura.desapilar()
-
-      # Ordenar la tripleta por grandeza de animales utilizando Bubble Sort
-      tripleta_ordenada = ordenarAnimales(pilaAnimales, tripleta)
-
-      # Calcular la suma de grandezas para la tripleta ordenada
-      suma_tripleta = sum(grandeza for animal, grandeza in pilaAnimales.ver_pila() if animal in tripleta_ordenada)
-
-      # Almacenar la tripleta ordenada junto con su suma de grandezas en la lista temporal
-      tripletas_con_suma.append((tripleta_ordenada, suma_tripleta))
-
-  # Aplicar el algoritmo Bubble Sort para ordenar la lista temporal por la suma de grandezas en orden ascendente
-  n = len(tripletas_con_suma)
-  for i in range(n - 1):
-      for j in range(0, n - i - 1):
-          if tripletas_con_suma[j][1] > tripletas_con_suma[j + 1][1] or (
-              tripletas_con_suma[j][1] == tripletas_con_suma[j + 1][1] and
-              tripletas_con_suma[j][0] > tripletas_con_suma[j + 1][0]
-          ):
-              tripletas_con_suma[j], tripletas_con_suma[j + 1] = tripletas_con_suma[j + 1], tripletas_con_suma[j]
-
-  # Crear una nueva pila ordenada
-  pila_apertura_ordenada = Pila()
-
-  # Apilar las tripletas ordenadas en la pila ordenada
-  for tripleta, _ in tripletas_con_suma:
-      pila_apertura_ordenada.apilar(tripleta)
-      pilaApertura.apilar(tripleta)
-
-  return pila_apertura_ordenada
-
-
-def ordenarPartes(pilaAnimales, pilaPartes):
-  # Crear una lista temporal para almacenar todas las tripletas con su suma de grandezas
-  lista_con_suma = []
-
-  # Procesar cada pila de tripletas en pilaPartes
-  while not pilaPartes.esta_vacia():
-      pila_parte = pilaPartes.desapilar()
-
-      # Calcular la suma de grandezas para cada tripleta y almacenarla en la lista temporal
-      while not pila_parte.esta_vacia():
-          tripleta = pila_parte.desapilar()
-          suma_tripleta = sum(grandeza for animal, grandeza in pilaAnimales.ver_pila() if animal in tripleta)
-          lista_con_suma.append((tripleta, suma_tripleta))
-
-  # Ordenar la lista temporal por la suma de grandezas en orden ascendente
-  lista_con_suma = ordenar_lista(lista_con_suma)
-
-  # Crear una nueva pila para almacenar las tripletas ordenadas
-  pila_ordenada = Pila()
-
-  # Apilar las tripletas ordenadas en la pila
-  for tripleta, _ in lista_con_suma:
-      pila_ordenada.apilar(tripleta)
-      pilaPartes.apilar(tripleta)
-
-  return pila_ordenada
-
-def mostrarPilas(pila_de_pilas):
-  while not pila_de_pilas.esta_vacia():
-    pila_individual = pila_de_pilas.desapilar()
-    print(pila_individual.ver_pila())
-
-
-
-#Print final con los datos ordenados
-
-def main(filename):
-  global n, m, k, animales, apertura, partes
-  n, m, k, animales, apertura, partes = leer_archivo(filename) 
-  
-  inicio = time()
-
-  min_participacion = menorParticipacion(apertura)
-  print("Animal con menor participacion:\n", min_participacion,"\n")
-  
-  max_participacion = mayorParticipacion(apertura)
-  print("Animal con mayor participacion:\n", max_participacion,"\n")
-  
-  escena_menor_grandeza = menorGrandeza(animales,apertura)
-  print("Escena con menor grandeza:\n", escena_menor_grandeza,"\n")
-
-  escena_mayor_grandeza = mayorGrandeza(animales,apertura)
-  print("Escena con mayor grandeza:\n", escena_mayor_grandeza,"\n")
-  
-  ordenar_apertura = (ordenarApertura(animales,apertura)).ver_pila()
-  print("Apertura ordenada ascendentemente:\n",ordenar_apertura,"\n")
-
-  (ordenarPartes(animales,partes))
-  nuevaPilaPartes = dividir_y_agrupar_pila(partes, k)
-  print("Partes ordenadas ascendentemente:\n") 
-  mostrarPilas(nuevaPilaPartes)
-  print("\n")
-
-  promedio = Promedio(animales, apertura)
-  print("Promedio de grandeza:\n", promedio)
-
-  fin = time()
-
-  print("\n","Tiempo de ejecución: ", round(fin-inicio,5), " segundos")
-
+    n = 0
+    m = 0
+    k = 0
+
+    #Será un diccionario
+    animales = {}
+    #Será una lista enlazada de tuplas
+    apertura = LinkedList()
+    #Será una lista enlazada que contiene pilas de partes 
+    #y estas partes contienen tuplas
+    partes = LinkedList()
+
+    #Se abre el archivo
+    with open(filename, 'r') as file:
+        n, m, k = map(int, file.readline().split())
+        file.readline()
+        #Crear tuplas de animales y almacenarlos en un diccionario
+        for i in range(n):
+            animal, grandeza = file.readline().strip().split()
+            animales[animal] = int(grandeza)
+
+        file.readline().split()
+        for i in range((m - 1) * k):
+            ListaEnt = LinkedList()
+            #La apertura tendrá tuplas de escenas
+            ani1, ani2, ani3 = file.readline().strip().split()
+            ListaEnt.insert(ani1, animales[ani1])
+            ListaEnt.insert(ani2, animales[ani2])
+            ListaEnt.insert(ani3, animales[ani3])
+            gran = animales[ani1] + animales[ani2] + animales[ani3]
+            apertura.insert(ListaEnt, gran)
+        file.readline().split()
+        for i in range(m - 1):
+            parte = LinkedList()
+            granTotal = 0
+            for j in range(k):
+                ListaEnt = LinkedList()
+                #La apertura tendrá tuplas de escenas
+                ani1, ani2, ani3 = file.readline().strip().split()
+                ListaEnt.insert(ani1, animales[ani1])
+                ListaEnt.insert(ani2, animales[ani2])
+                ListaEnt.insert(ani3, animales[ani3])
+                gran = animales[ani1] + animales[ani2] + animales[ani3]
+                parte.insert(ListaEnt, gran)
+                granTotal += gran
+            #Inserta cada parte (lista enlazada) que contiene tuplas en partes(lista enlazada) que contiene)    
+            partes.insert(parte, granTotal)
+    return n, m, k, animales, apertura, partes
+
+#Imprimir todos los elementos de una lista enlazada, 
+#incluyendo las listas enlazadas anidadas
+#Complejidad: O(n)
+def recorrerLista(head, mensaje):
+    current = head
+    while current is not None:
+        # Si el dato actual es otra lista enlazada, recórrela recursivamente
+        if isinstance(current.data, LinkedList):
+            print(mensaje)
+            recorrerLista(current.data.getHead(), mensaje)
+            print("Grandeza: ", current.getGrandeza())
+        else:
+            # Procesa el dato actual
+            print(current.getData())
+        current = current.getNext()
+
+#Complejidad: O(n)
+#Cuenta cunatas veces se repite un animal en las escenas        
+def contarRepetidos(linked_list):
+    current = linked_list.getHead()
+    dict_repetidos = {}
+    while current is not None:
+        # Si el dato actual es otra lista enlazada, recórrela recursivamente
+        if isinstance(current.data, LinkedList):
+            dict_repetidos_anidados = contarRepetidos(current.data)
+            for key, value in dict_repetidos_anidados.items():
+                if key in dict_repetidos:
+                    dict_repetidos[key] += value
+                else:
+                    dict_repetidos[key] = value
+        else:
+            # Procesa el dato actual
+            if current.getData() in dict_repetidos:
+                dict_repetidos[current.getData()] += 2
+            else:
+                dict_repetidos[current.getData()] = 2
+        current = current.getNext()    
+    return dict_repetidos
+
+#Complejidad: O(n + m)
+def hallarRepetidos (apertura, bool):
+    diccionario = contarRepetidos(apertura)
+    repeticion = 0
+    lista = []
+
+    for key, value in diccionario.items():
+        if not lista or (value > repeticion and bool) or (value < repeticion and not bool):
+            lista = [key]
+            repeticion = value
+        elif value == repeticion:
+            lista.append(key)
+            repeticion = value
+
+    return lista, repeticion            
+
+#Complejidad O(n)
+def get_max_value(input):
+    if isinstance(input, Nodo):
+        if isinstance(input.getData(), LinkedList):
+            current = input.getData()
+
+            max_value = current.getHead().getGrandeza()
+            current = current.getHead().getNext()
+            while current is not None:
+                if current.getGrandeza() > max_value:
+                    max_value = current.getGrandeza()
+                current = current.getNext()
+            return max_value
+
+# Complejiad O(n)
+# Función para dividir la lista en mitades
+def split_list(head):
+    if not head or not head.getNext():
+        return head, None
+
+    slow = head
+    fast = head.getNext()
+
+    while fast:
+        fast = fast.getNext()
+        if fast:
+            fast = fast.getNext()
+            slow = slow.getNext()
+
+    mid = slow.getNext()
+    slow.setNext(None)
+    return head, mid
+
+# Complejidad O(n+m)
+# Función para combinar dos listas ordenadas
+def merge(left, right):
+    dummy_node = Nodo(0, 0)
+    current = dummy_node
+
+    while left and right:
+        if left.getGrandeza() < right.getGrandeza() or (left.getGrandeza() == right.getGrandeza() and get_max_value(left) < get_max_value(right)):
+            current.setNext(left)
+            left = left.getNext()
+        else:
+            current.next = right
+            right = right.getNext()
+        current = current.getNext()
+
+    current.next = left if left else right
+    return dummy_node.getNext()
+
+# Complejidad O(n log n)
+# Función principal de Merge Sort para la lista enlazada
+def merge_sort(head):
+    if not head or not head.getNext():
+        return head
+
+    left, right = split_list(head)
+    left_sorted = merge_sort(left)
+    right_sorted = merge_sort(right)
+
+    return merge(left_sorted, right_sorted)
+
+# Complejidad O(n log n)
+def merge_sort_parte(apertura):
+    apertura.setHead(merge_sort(apertura.getHead()))
+
+# Complejidad O(n log n)
+def merge_sort_escena_parte(partes):
+    merge_sort_parte(partes)
+    current = partes.getHead()
+    while current is not None:
+        current.getData().setHead(merge_sort(current.getData().getHead()))
+        current = current.getNext()   
+    current2 = partes.getHead()   
+    while current2 is not None:
+        merge_sort_animales_parte(current2.getData())
+        current2 = current2.getNext()
+
+# Complejidad O(n log n)
+def merge_sort_animales_parte(partes):
+    current = partes.getHead()
+    while current is not None:
+        current.getData().setHead(merge_sort(current.getData().getHead()))
+        current = current.getNext()        
+
+# Complejidad O(1)    
+def menorEscena(apertura):
+    return apertura.getHead().getData(), apertura.getHead().getGrandeza()
+
+# Complejidad O(n)
+def mayorEscena(apertura):
+    current = apertura.getHead()
+
+    while current.getNext() is not None:
+        current = current.getNext()
+
+    return current.getData(), current.getGrandeza()
+
+# Complejidad O(n)
+def promedioGrandeza(linked_list):
+    current = linked_list.getHead()
+    suma = current.getGrandeza()
+    contador = 1
+    current = current.getNext()
+    while current is not None:
+        suma += current.getGrandeza()
+        contador += 1
+        current = current.getNext()
+    return suma / contador
+        
+def main (filename):
+
+    time1 = time()
+    n, m, k, animales, apertura, partes = leer_archivo(filename)
+
+    print(" ==== Apertura ==== \n")
+    merge_sort_parte(apertura)
+    merge_sort_animales_parte(apertura)
+    recorrerLista(apertura.getHead(), "==== Escena ====\n")
+    print("")
+    print(" ==== (M-1) partes ==== \n")
+    merge_sort_escena_parte(partes)
+    recorrerLista(partes.getHead(), "")
+    print("")
+    print("Animales que participaron en menos escenas: ")
+    lista, repeticion = hallarRepetidos(apertura, False)
+    print(lista)
+    print("Repeticiones: ", repeticion)
+    print("")
+    print("Animales que participaron en más escenas: ")
+    lista, repeticion = hallarRepetidos(apertura, True)
+    print(lista)
+    print("Repeticiones: ", repeticion)
+    print("")
+    print("La escena con menor grandeza fue: ")
+    escena, grandeza = menorEscena(apertura)
+    recorrerLista(escena.getHead(), "\n")
+    print("Grandeza de la escena:", grandeza)
+    print("")
+    print("La escena con mayor grandeza fue: ")
+    escena, grandeza = mayorEscena(apertura)
+    recorrerLista(escena.getHead(), "\n")
+    print("Grandeza de la escena:", grandeza)
+    print("")
+    print("Promedio de la grandeza total del espectáculo: ", round(promedioGrandeza(apertura),2))
+    time2 = time()
+
+    print("Tiempo de ejecución: ", time2 - time1)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("filename", help="Nombre del archivo de entrada")
     args = parser.parse_args()
     main(args.filename)
+
+

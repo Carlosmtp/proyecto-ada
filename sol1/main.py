@@ -27,8 +27,8 @@ def leer_archivo(filename):
 
 def participacion_animales(apertura):
     participacion = {}
-    for i in range(len(apertura)):
-        for j in range(len(apertura[i])):
+    for i in range((m-1)*k):
+        for j in range(3):
             if apertura[i][j] in participacion:
                 participacion[apertura[i][j]] += 2
             else:
@@ -39,7 +39,7 @@ def animal_mas_menos_participacion(participaciones):
     animal_mas_participacion = []
     animal_menos_participacion = []
     max = 0
-    min = 100
+    min = float('inf')
     for i in participaciones:
         if participaciones[i] > max:
             max = participaciones[i]
@@ -69,13 +69,17 @@ def ordenarEscena(escena,grandezas):
                     escena[j + 1] = aux
     return escena, grandeza
 
-def ordenarParte(parte, grandezas):
+def ordenarParte(parte, grandezas, isApertura):
     grandeza=0
-    for i in range(len(parte)):
+    if isApertura:
+        long = (m-1)*k
+    else:
+        long = k
+    for i in range(long):
         parte[i] = ordenarEscena(parte[i], grandezas)
         grandeza+=parte[i][1]
-    for i in range(len(parte) - 1):
-        for j in range(len(parte) - 1):
+    for i in range(long - 1):
+        for j in range(long - 1):
             if parte[j][1] > parte[j + 1][1]:
                 aux = parte[j]
                 parte[j] = parte[j + 1]
@@ -90,7 +94,7 @@ def ordenarParte(parte, grandezas):
 def ordenarPartes(partes, grandezas):
     grandeza=0
     for i in range(m-1):
-        partes[i]=ordenarParte(partes[i],grandezas)
+        partes[i]=ordenarParte(partes[i],grandezas,False)
         grandeza+=partes[i][1]
     for i in range(m-2):
         for j in range(m-2):
@@ -113,7 +117,7 @@ def main(filename):
     global n, m, k, animales, apertura, partes
     n, m, k, animales, apertura, partes = leer_archivo(filename)
     participaciones=participacion_animales(apertura)
-    apertura_sorted = ordenarParte(apertura, animales)
+    apertura_sorted = ordenarParte(apertura, animales, True)
     print("Apertura:\n", apertura_sorted,"\n")
     partes_sorted = ordenarPartes(partes, animales)
     print("Partes:\n", partes_sorted,"\n")
@@ -125,7 +129,7 @@ def main(filename):
     escena_mayor_grandeza = apertura_sorted[0][(m-1)*k-1]
     print("Escena mayor grandeza:\n", escena_mayor_grandeza,"\n")
     promedio = promedio_grandeza(apertura_sorted)
-    print("Promedio de grandeza:\n",promedio)
+    print("Promedio de grandeza:\n", round(promedio,2))
     fin = time()
     print("\n","Tiempo de ejecución: ", round(fin-inicio,5), " segundos")
 

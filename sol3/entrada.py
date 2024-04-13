@@ -1,5 +1,6 @@
 from clases import Animal, Escena, Parte, Espectaculo
 
+# Complejidad: O(N) donde N es el número de líneas en el archivo
 def leer_archivo(filename):
     n=0
     m=0
