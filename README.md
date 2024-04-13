@@ -4,6 +4,8 @@
 * Nicol Ortiz 2241463
 * Carlos Mauricio Tovar Parra 1741699
 
+[Enunciado del Proyecto](Enunciado_proyecto.pdf)
+
 #### Ejecución
 En la carpeta raiz del proyecto:
 ```
